@@ -1,6 +1,6 @@
 === Plugin Name ===
 Contributors: collizo4sky
-Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=HAAAMDMXMSP58
+Donate link: https://w3guy.com/about/
 Tags: widget, text widget, shortcode, PHP, settings, post, page, content
 Requires at least: 3.5
 Tested up to: 4.9/8
