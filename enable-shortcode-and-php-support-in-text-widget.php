@@ -3,8 +3,8 @@
  Plugin Name: Enable Shortcode and PHP in Text widget
  Plugin URI: http://w3guy.com/shortcode-php-support-wordpress-text-widget/
  Description: Enable shortcode support and execute PHP in WordPress's Text Widget
- Author: Agbonghama Collins
- Version: 1.2.3
+ Author: Collins Agbonghama
+ Version: 1.2.6
  Author URI: http://w3guy.com
  Text Domain: espw-plugin
  Domain Path: /languages/
@@ -47,7 +47,6 @@ function espw_plugin_menu() {
 
 function espw_plugin_settings() {
 	echo '<div class="wrap">';
-	screen_icon();
 	echo '<h2>';
 	_e( 'Enable Shortcode and PHP support in Text widget', 'espw-plugin' );
 	echo '</h2>';
@@ -58,41 +57,6 @@ function espw_plugin_settings() {
 	?>
 	<br>
 	<br>
-	<table>
-		<tr>
-			<td>
-				<a href="https://twitter.com/w3guy" class="twitter-follow-button" data-show-count="false" data-size="large">Follow @tech4sky</a>
-				<script>
-					!function (d, s, id) {
-						var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https';
-						if (!d.getElementById(id)) {
-							js = d.createElement(s);
-							js.id = id;
-							js.src = p + '://platform.twitter.com/widgets.js';
-							fjs.parentNode.insertBefore(js, fjs);
-						}
-					}(document, 'script', 'twitter-wjs');
-				</script>
-			</td>
-			<td>
-				<div id="fb-root"></div>
-				<script>
-					( function (d, s, id) {
-						var js, fjs = d.getElementsByTagName(s)[0];
-						if (d.getElementById(id))
-							return;
-						js = d.createElement(s);
-						js.id = id;
-						js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=399748413426161&version=v2.0";
-						fjs.parentNode.insertBefore(js, fjs);
-					}(document, 'script', 'facebook-jssdk'));
-				</script>
-				<div class="fb-like" data-href="https://facebook.com/tech4sky" data-layout="standard" data-action="like" data-show-faces="false" data-share="false"></div>
-		</tr>
-	</table>
-	<br/><br/><br/>
-	<h2><?php _e( 'Built with <3 and coffee by', 'espw-plugin' ); ?>
-		<strong><a href="http://w3guy.com" target="_blank">Agbonghama Collins</a></strong></h2>
 	<div style="width: 600px; text-align: center; margin: 10px auto; padding: 2px; background-color: #e3e3e3; border: 1px solid #DDDDDD">
 		<p>
 

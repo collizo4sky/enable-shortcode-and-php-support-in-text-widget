@@ -2,76 +2,76 @@
 
 if ( ! class_exists( 'MO_Admin_Notice' ) ) {
 
-	class MO_Admin_Notice {
-		public function __construct() {
-			add_action( 'admin_notices', array( $this, 'admin_notice' ) );
-			add_action( 'network_admin_notices', array( $this, 'admin_notice' ) );
+    class MO_Admin_Notice {
+        public function __construct() {
+            add_action( 'admin_notices', array( $this, 'admin_notice' ) );
+            add_action( 'network_admin_notices', array( $this, 'admin_notice' ) );
 
-			add_action( 'admin_post_mo_dismiss_adnotice', array( $this, 'dismiss_admin_notice' ) );
-		}
+            add_action( 'admin_init', array( $this, 'dismiss_admin_notice' ) );
+        }
 
-		public function dismiss_admin_notice() {
-			$url = admin_url();
-			update_option( 'mo_dismiss_adnotice', 'true' );
-			if ( isset( $_GET['url'] ) ) {
-				$url = esc_url_raw( $_GET['url'] );
-			}
+        public function dismiss_admin_notice() {
+            if ( ! isset( $_GET['mo-adaction'] ) || $_GET['mo-adaction'] != 'mo_dismiss_adnotice' ) {
+                return;
+            }
 
-			wp_redirect( $url );
-			exit;
-		}
+            $url = admin_url();
+            update_option( 'mo_dismiss_adnotice', 'true' );
 
-		public function admin_notice() {
+            wp_redirect( $url );
+            exit;
+        }
 
-			if ( get_option( 'mo_dismiss_adnotice', 'false' ) == 'true' ) {
-				return;
-			}
+        public function admin_notice() {
 
-			if ( $this->is_plugin_installed() && $this->is_plugin_active() ) {
-				return;
-			}
+            if ( get_option( 'mo_dismiss_adnotice', 'false' ) == 'true' ) {
+                return;
+            }
 
-			$dismiss_url = esc_url_raw(
-				add_query_arg(
-					[
-						'action' => 'mo_dismiss_adnotice',
-						'url'    => $this->current_admin_url()
-					],
-					admin_url( 'admin-post.php' )
-				)
-			);
-			$this->notice_css();
-			$install_url = wp_nonce_url(
-				admin_url( 'update.php?action=install-plugin&plugin=mailoptin' ),
-				'install-plugin_mailoptin'
-			);
+            if ( $this->is_plugin_installed() && $this->is_plugin_active() ) {
+                return;
+            }
 
-			$activate_url = wp_nonce_url( admin_url( 'plugins.php?action=activate&plugin=mailoptin%2Fmailoptin.php' ), 'activate-plugin_mailoptin/mailoptin.php' );
-			?>
+            $dismiss_url = esc_url_raw(
+                add_query_arg(
+                    array(
+                        'mo-adaction' => 'mo_dismiss_adnotice'
+                    ),
+                    admin_url()
+                )
+            );
+            $this->notice_css();
+            $install_url = wp_nonce_url(
+                admin_url( 'update.php?action=install-plugin&plugin=mailoptin' ),
+                'install-plugin_mailoptin'
+            );
+
+            $activate_url = wp_nonce_url( admin_url( 'plugins.php?action=activate&plugin=mailoptin%2Fmailoptin.php' ), 'activate-plugin_mailoptin/mailoptin.php' );
+            ?>
             <div class="mo-admin-notice notice notice-success">
                 <div class="mo-notice-first-half">
                     <p>
-						<?php
-						printf(
-							__( 'Powerful free plugin that %1$sconvert website visitors to email subscribers%2$s with beautiful conversion optimized forms%2$s and %1$sincrease revenue%2$s with automated newsletters.' ),
-							'<span class="mo-stylize"><strong>', '</strong></span>' );
-						?>
-                    </p>
-                    <p>
-                        <iframe width="480" height="270" src="https://www.youtube.com/embed/Mix9_gTTlrE?rel=0&amp;controls=0&amp;showinfo=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                        <?php
+                        printf(
+                            __( 'Powerful free plugin that %1$sconvert website visitors to email subscribers%2$s with beautiful conversion optimized forms%2$s and %1$sincrease revenue%2$s with automated newsletters.' ),
+                            '<span class="mo-stylize"><strong>', '</strong></span>' );
+                        ?>
                     </p>
                 </div>
                 <div class="mo-notice-other-half">
-					<?php if ( ! $this->is_plugin_installed() ) : ?>
+                    <?php if ( ! $this->is_plugin_installed() ) : ?>
                         <a class="button button-primary button-hero" id="mo-install-mailoptin-plugin" href="<?php echo $install_url; ?>">
-							<?php _e( 'Install MailOptin Now for Free!' ); ?>
+                            <?php _e( 'Install MailOptin Now for Free!' ); ?>
                         </a>
-					<?php endif; ?>
-					<?php if ( $this->is_plugin_installed() && ! $this->is_plugin_active() ) : ?>
+                    <?php endif; ?>
+                    <?php if ( $this->is_plugin_installed() && ! $this->is_plugin_active() ) : ?>
                         <a class="button button-primary button-hero" id="mo-activate-mailoptin-plugin" href="<?php echo $activate_url; ?>">
-							<?php _e( 'Activate MailOptin Now!' ); ?>
+                            <?php _e( 'Activate MailOptin Now!' ); ?>
                         </a>
-					<?php endif; ?>
+                    <?php endif; ?>
+                    <div class="mo-notice-learn-more">
+                        <a target="_blank" href="https://mailoptin.io/?utm_source=moadmin_notice&utm_medium=wp-user-avtar">Learn more</a>
+                    </div>
                 </div>
                 <a href="<?php echo $dismiss_url; ?>">
                     <button type="button" class="notice-dismiss">
@@ -79,53 +79,52 @@ if ( ! class_exists( 'MO_Admin_Notice' ) ) {
                     </button>
                 </a>
             </div>
-			<?php
-		}
+            <?php
+        }
 
-		public function current_admin_url() {
-			$parts = parse_url( home_url() );
-			$uri   = $parts['scheme'] . '://' . $parts['host'];
+        public function current_admin_url() {
+            $parts = parse_url( home_url() );
+            $uri   = $parts['scheme'] . '://' . $parts['host'];
 
-			if ( array_key_exists( 'port', $parts ) ) {
-				$uri .= ':' . $parts['port'];
-			}
+            if ( array_key_exists( 'port', $parts ) ) {
+                $uri .= ':' . $parts['port'];
+            }
 
-			$uri .= add_query_arg( [] );
+            $uri .= add_query_arg( array() );
 
-			return $uri;
-		}
+            return $uri;
+        }
 
-		public function is_plugin_installed() {
-			$installed_plugins = get_plugins();
+        public function is_plugin_installed() {
+            $installed_plugins = get_plugins();
 
-			return isset( $installed_plugins['mailoptin/mailoptin.php'] );
-		}
+            return isset( $installed_plugins['mailoptin/mailoptin.php'] );
+        }
 
-		public function is_plugin_active() {
-			return is_plugin_active( 'mailoptin/mailoptin.php' );
-		}
+        public function is_plugin_active() {
+            return is_plugin_active( 'mailoptin/mailoptin.php' );
+        }
 
-		public function notice_css() {
-			?>
+        public function notice_css() {
+            ?>
             <style type="text/css">
                 .mo-admin-notice {
-                    background: #0b11cfba;
-                    color: #fff;
-                    border-left-color: #000;
+                    background: #fff;
+                    color: #000;
+                    border-left-color: #46b450;
                     position: relative;
                 }
 
                 .mo-admin-notice .notice-dismiss:before {
-                    color: #fff;
+                    color: #72777c;
                 }
 
                 .mo-admin-notice .mo-stylize {
                     line-height: 2;
-                    border-bottom: 2px solid #ff0412;
                 }
 
                 .mo-admin-notice .button-primary {
-                    background: #ca4a1f;
+                    background: #006799;
                     text-shadow: none;
                     border: 0;
                     box-shadow: none;
@@ -134,32 +133,93 @@ if ( ! class_exists( 'MO_Admin_Notice' ) ) {
                 .mo-notice-first-half {
                     width: 66%;
                     display: inline-block;
+                    margin: 10px 0;
                 }
 
                 .mo-notice-other-half {
                     width: 33%;
                     display: inline-block;
-                    padding: 15% 0;
+                    padding: 20px 0;
                     position: absolute;
+                    text-align: center;
                 }
 
                 .mo-notice-first-half p {
-                    font-size: 18px;
+                    font-size: 14px;
+                }
+
+                .mo-notice-learn-more a {
+                    margin: 10px;
+                }
+
+                .mo-notice-learn-more {
+                    margin-top: 10px;
                 }
             </style>
-			<?php
-		}
+            <?php
+        }
 
-		public static function instance() {
-			static $instance = null;
+        public static function instance() {
+            static $instance = null;
 
-			if ( is_null( $instance ) ) {
-				$instance = new self();
-			}
+            if ( is_null( $instance ) ) {
+                $instance = new self();
+            }
 
-			return $instance;
-		}
-	}
+            return $instance;
+        }
+    }
 }
 
 MO_Admin_Notice::instance();
+
+if ( ! class_exists('MO_Feature_Plugin')) {
+    class MO_Feature_Plugin
+    {
+        public static function init()
+        {
+            if (class_exists('MailOptin\Libsodium\Libsodium')) return;
+
+            add_filter('install_plugins_table_api_args_featured', [__CLASS__, 'featured_plugins_tab']);
+        }
+
+        public static function featured_plugins_tab($args)
+        {
+            add_filter('plugins_api_result', [__CLASS__, 'inject_plugin'], 10, 3);
+
+            return $args;
+        }
+
+        public static function inject_plugin($res, $action, $args)
+        {
+            //remove filter to avoid infinite loop.
+            remove_filter('plugins_api_result', [__CLASS__, 'inject_plugin'], 10, 3);
+
+            $api = plugins_api('plugin_information', array(
+                'slug'   => 'mailoptin',
+                'is_ssl' => is_ssl(),
+                'fields' => array(
+                    'banners'           => true,
+                    'reviews'           => true,
+                    'downloaded'        => true,
+                    'active_installs'   => true,
+                    'icons'             => true,
+                    'short_description' => true,
+                )
+            ));
+
+            if ( ! is_wp_error($api)) {
+                array_unshift($res->plugins, $api);
+            }
+
+            return $res;
+        }
+
+        public static function instance()
+        {
+            add_action('plugins_loaded', [__CLASS__, 'init']);
+        }
+    }
+
+    MO_Feature_Plugin::instance();
+}

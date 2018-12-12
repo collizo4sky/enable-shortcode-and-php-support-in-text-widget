@@ -2,9 +2,9 @@
 Contributors: collizo4sky
 Donate link: https://w3guy.com/about/
 Tags: widget, text widget, shortcode, PHP, settings, post, page, content
-Requires at least: 3.5
-Tested up to: 4.9/8
-Stable tag: 1.2.3
+Requires at least: 4.0
+Tested up to: 5.0
+Stable tag: 1.2.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,6 +20,7 @@ More information and documentation at [http://w3guy.com/shortcode-php-support-wo
 
 ### See Also
 * **[ProfilePress](https://wordpress.org/plugins/ppress/)**: A shortcode based WordPress form builder that makes building custom login, registration and password reset forms stupidly simple. [More info here](http://profilepress.net)
+* **[OmnipayWP](https://omnipay.io)**: Payment gateways for WordPress including Easy Digital Downloads & WooCommerce plugins.
 
 = Translators =
 
@@ -56,6 +57,15 @@ The plugin is quite easy to use. Go to the settings page and check the options t
 Visit my blog [w3guy.com](http://w3guy.com/shortcode-php-support-wordpress-text-widget/) for the more information.
  
 == Changelog ==
+
+= 1.2.6 =
+* Improve compatibility with WordPress 5.0
+
+= 1.2.5 =
+* Make admin notice dismiss button more obvious.
+
+= 1.2.4 =
+* Small fix and improvement.
 
 = 1.2.3 =
 * Update plugin to be compatibile with latest WordPress after many years.
