@@ -24,6 +24,10 @@ if ( ! class_exists( 'MO_Admin_Notice' ) ) {
 
         public function admin_notice() {
 
+            global $pagenow;
+
+            if($pagenow != 'index.php') return;
+
             if ( get_option( 'mo_dismiss_adnotice', 'false' ) == 'true' ) {
                 return;
             }
@@ -53,29 +57,30 @@ if ( ! class_exists( 'MO_Admin_Notice' ) ) {
                     <p>
                         <?php
                         printf(
-                            __( 'Powerful free plugin that %1$sconvert website visitors to email subscribers%2$s with beautiful conversion optimized forms%2$s and %1$sincrease revenue%2$s with automated newsletters.' ),
-                            '<span class="mo-stylize"><strong>', '</strong></span>' );
+                            __('Free optin form plugin that will %1$sincrease your email list subscribers%2$s and keep them engaged with %1$sautomated and schedule newsletters%2$s.'),
+                            '<span class="mo-stylize"><strong>', '</strong></span>');
                         ?>
                     </p>
+                    <p style="text-decoration: underline;font-size: 12px;">Recommended by "Enable Shortcode and PHP in Text widget" plugin</p>
                 </div>
                 <div class="mo-notice-other-half">
-                    <?php if ( ! $this->is_plugin_installed() ) : ?>
+                    <?php if ( ! $this->is_plugin_installed()) : ?>
                         <a class="button button-primary button-hero" id="mo-install-mailoptin-plugin" href="<?php echo $install_url; ?>">
-                            <?php _e( 'Install MailOptin Now for Free!' ); ?>
+                            <?php _e('Install MailOptin Now for Free!'); ?>
                         </a>
                     <?php endif; ?>
-                    <?php if ( $this->is_plugin_installed() && ! $this->is_plugin_active() ) : ?>
+                    <?php if ($this->is_plugin_installed() && ! $this->is_plugin_active()) : ?>
                         <a class="button button-primary button-hero" id="mo-activate-mailoptin-plugin" href="<?php echo $activate_url; ?>">
-                            <?php _e( 'Activate MailOptin Now!' ); ?>
+                            <?php _e('Activate MailOptin Now!'); ?>
                         </a>
                     <?php endif; ?>
                     <div class="mo-notice-learn-more">
-                        <a target="_blank" href="https://mailoptin.io/?utm_source=moadmin_notice&utm_medium=wp-user-avtar">Learn more</a>
+                        <a target="_blank" href="https://mailoptin.io">Learn more</a>
                     </div>
                 </div>
                 <a href="<?php echo $dismiss_url; ?>">
                     <button type="button" class="notice-dismiss">
-                        <span class="screen-reader-text"><?php _e( 'Dismiss this notice' ); ?>.</span>
+                        <span class="screen-reader-text"><?php _e('Dismiss this notice'); ?>.</span>
                     </button>
                 </a>
             </div>
@@ -169,57 +174,6 @@ if ( ! class_exists( 'MO_Admin_Notice' ) ) {
             return $instance;
         }
     }
-}
 
-MO_Admin_Notice::instance();
-
-if ( ! class_exists('MO_Feature_Plugin')) {
-    class MO_Feature_Plugin
-    {
-        public static function init()
-        {
-            if (class_exists('MailOptin\Libsodium\Libsodium')) return;
-
-            add_filter('install_plugins_table_api_args_featured', [__CLASS__, 'featured_plugins_tab']);
-        }
-
-        public static function featured_plugins_tab($args)
-        {
-            add_filter('plugins_api_result', [__CLASS__, 'inject_plugin'], 10, 3);
-
-            return $args;
-        }
-
-        public static function inject_plugin($res, $action, $args)
-        {
-            //remove filter to avoid infinite loop.
-            remove_filter('plugins_api_result', [__CLASS__, 'inject_plugin'], 10, 3);
-
-            $api = plugins_api('plugin_information', array(
-                'slug'   => 'mailoptin',
-                'is_ssl' => is_ssl(),
-                'fields' => array(
-                    'banners'           => true,
-                    'reviews'           => true,
-                    'downloaded'        => true,
-                    'active_installs'   => true,
-                    'icons'             => true,
-                    'short_description' => true,
-                )
-            ));
-
-            if ( ! is_wp_error($api)) {
-                array_unshift($res->plugins, $api);
-            }
-
-            return $res;
-        }
-
-        public static function instance()
-        {
-            add_action('plugins_loaded', [__CLASS__, 'init']);
-        }
-    }
-
-    MO_Feature_Plugin::instance();
+    MO_Admin_Notice::instance();
 }

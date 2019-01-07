@@ -3,8 +3,8 @@ Contributors: collizo4sky
 Donate link: https://w3guy.com/about/
 Tags: widget, text widget, shortcode, PHP, settings, post, page, content
 Requires at least: 4.0
-Tested up to: 5.0
-Stable tag: 1.2.6
+Tested up to: 5.0.2
+Stable tag: 1.2.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -57,6 +57,9 @@ The plugin is quite easy to use. Go to the settings page and check the options t
 Visit my blog [w3guy.com](http://w3guy.com/shortcode-php-support-wordpress-text-widget/) for the more information.
  
 == Changelog ==
+
+= 1.2.7 =
+* Fixed Parse error: syntax error, unexpected ‘[‘ for PHP less than 5.4
 
 = 1.2.6 =
 * Improve compatibility with WordPress 5.0
